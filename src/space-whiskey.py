@@ -52,11 +52,6 @@ canvas.itemconfigure(count, text=updated_count)
 # Build Library
 library.buildLibrary(canvas, directories, utils.getGamesDirectory())
 
-def runGame(e):
-    library.startGame()
-
-root.bind("<space>", runGame)
-
 def _quit(event):
     root.destroy()
 
