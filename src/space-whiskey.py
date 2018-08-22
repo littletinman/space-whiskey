@@ -8,7 +8,7 @@ import os
 import subprocess
 import json
 import utils
-import library
+from library import *
 
 # Setup
 root = tk.Tk()
@@ -36,21 +36,17 @@ brandingImage = origBrandingImage.zoom(1, 1)
 branding = canvas.create_image(canvas.winfo_width()/2, 15, anchor=N, image=brandingImage)
 
 # Version and Repo
-version = canvas.create_text(10, canvas.winfo_height() - 5, anchor=SW, fill="white", text="0.0.1")
+version = canvas.create_text(10, canvas.winfo_height() - 5, anchor=SW, fill="white", text="0.0.2")
 contribute = canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height() - 5, anchor=S, fill="white", text="github.com/littletinman/space-whiskey")
 count = canvas.create_text(canvas.winfo_width() - 5, canvas.winfo_height() - 5, anchor=SE, fill="white", text="0 Games")
 
-# User Path
-path = os.path.expanduser("~/")
-utils.verifyGamesDirectory()
+# Build Library
+library = Library(root, canvas)
+library.build()
 
 # Games
-directories = utils.listDirectories()
-updated_count = str(len(directories)) + " Games"
+updated_count = str(library.getCount()) + " Games"
 canvas.itemconfigure(count, text=updated_count)
-
-# Build Library
-library.buildLibrary(canvas, directories, utils.getGamesDirectory())
 
 def _quit(event):
     root.destroy()
