@@ -3,7 +3,7 @@
     space-whiskey.library
     ~~~~~~~~~~~~~~
     :copyright: © 2018 by the Phillip Royer.
-    :license: GNU, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 import utils
 import json
@@ -25,29 +25,53 @@ class Library:
             if utils.verifyMetadata(directory):
                 with open(self.path + '/' + directory + '/metadata.json') as f:
                     data = json.load(f)
-                    x = self.canvas.master.winfo_width()/2 + (idx * 250)
-                    game = Game(directory, data['title'], data['description'], self.path + '/' + directory + '/' + data['image'], data['command'])
-                    game.createFrame(self.canvas, x)
+                    self.x = self.canvas.master.winfo_width()/2 + (idx * 250)
+                    game = Game(
+                            directory, 
+                            data['title'], 
+                            data['description'], 
+                            self.path + '/' + directory + '/' + data['image'], 
+                            data['command'])
+                    game.createFrame(self.canvas, self.x)
                     self.games.append(game)
 
-        self.games[self.index].focus()
-        self.root.bind("<Right>", self.nextGame)
-        self.root.bind("<Left>", self.previousGame)
+        self.buildLibraryFromFile()
+
+        if(self.getCount() > 0):
+            self.games[self.index].focus()
+            self.root.bind("<Right>", self.nextGame)
+            self.root.bind("<Left>", self.previousGame)
+    
+    def buildLibraryFromFile(self):
+        if utils.verifyLibraryFile():
+            with open(self.path + '/library.json') as f:
+                library_file = json.load(f)
+                for idx, item in enumerate(library_file['games']):
+                    self.x = self.canvas.master.winfo_width()/2 + (idx * 250)
+                    game = Game(
+                            'Games', 
+                            item['title'], 
+                            item['description'], 
+                            item['image'], 
+                            item['command'])
+                    game.createFrame(self.canvas, self.x)
+                    self.games.append(game)
+
 
     def nextGame(self, event):
         if self.index < len(self.games) - 1:
             self.index += 1
             for game in self.games:
-                game.unfocus()
                 game.moveLeft()
+                game.unfocus()
             self.games[self.index].focus()
 
     def previousGame(self, event):
         if self.index > 0:
             self.index -= 1
             for game in self.games:
-                game.unfocus()
                 game.moveRight()
+                game.unfocus()
             self.games[self.index].focus()
 
     def getCount(self):

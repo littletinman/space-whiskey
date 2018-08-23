@@ -3,7 +3,7 @@
     space-whiskey.utils
     ~~~~~~~~~~~~~~
     :copyright: © 2018 by the Phillip Royer.
-    :license: GNU, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 import os
 
@@ -13,6 +13,13 @@ games_path = user_path + "Games"
 def verifyGamesDirectory():
     if not folderExists():
         createFolder()
+
+def verifyLibraryFile():
+    if libraryFileExists():
+        # TODO validate fields
+        return True
+    else:
+        return False
 
 def verifyMetadata(directory):
     if metadataExists(games_path + "/" + directory):
@@ -31,6 +38,9 @@ def folderExists():
 
 def metadataExists(directory):
     return os.path.isfile(directory + "/metadata.json")
+
+def libraryFileExists():
+    return os.path.isfile(games_path + "/library.json")
 
 def createFolder():
     os.makedirs(games_path)
