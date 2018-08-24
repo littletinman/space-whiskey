@@ -25,36 +25,36 @@ class Library:
             if utils.verifyMetadata(directory):
                 with open(self.path + '/' + directory + '/metadata.json') as f:
                     data = json.load(f)
-                    self.x = self.canvas.master.winfo_width()/2 + (idx * 250)
                     game = Game(
-                            directory, 
-                            data['title'], 
-                            data['description'], 
-                            self.path + '/' + directory + '/' + data['image'], 
+                            directory,
+                            data['title'],
+                            data['description'],
+                            self.path + '/' + directory + '/' + data['image'],
                             data['command'])
-                    game.createFrame(self.canvas, self.x)
+                    game.createFrame(self.canvas)
                     self.games.append(game)
 
         self.buildLibraryFromFile()
 
-        if(self.getCount() > 0):
+        if self.getCount() > 0:
             self.games[self.index].focus()
+            if (self.index + 1) <= (self.getCount() - 1):
+                self.games[self.index + 1].unfocusRight()
             self.root.bind("<Right>", self.nextGame)
             self.root.bind("<Left>", self.previousGame)
-    
+
     def buildLibraryFromFile(self):
         if utils.verifyLibraryFile():
             with open(self.path + '/library.json') as f:
                 library_file = json.load(f)
-                for idx, item in enumerate(library_file['games']):
-                    self.x = self.canvas.master.winfo_width()/2 + (idx * 250)
+                for item in library_file['games']:
                     game = Game(
-                            'Games', 
-                            item['title'], 
-                            item['description'], 
-                            item['image'], 
+                            'Games',
+                            item['title'],
+                            item['description'],
+                            item['image'],
                             item['command'])
-                    game.createFrame(self.canvas, self.x)
+                    game.createFrame(self.canvas)
                     self.games.append(game)
 
 
@@ -62,17 +62,23 @@ class Library:
         if self.index < len(self.games) - 1:
             self.index += 1
             for game in self.games:
-                game.moveLeft()
                 game.unfocus()
+            if self.index > 0:
+                self.games[self.index - 1].unfocusLeft()
             self.games[self.index].focus()
+            if self.index < self.getCount() - 1:
+                self.games[self.index + 1].unfocusRight()
 
     def previousGame(self, event):
         if self.index > 0:
             self.index -= 1
             for game in self.games:
-                game.moveRight()
                 game.unfocus()
+            if self.index > 0:
+                self.games[self.index - 1].unfocusLeft()
             self.games[self.index].focus()
+            if self.index < self.getCount() - 1:
+                self.games[self.index + 1].unfocusRight()
 
     def getCount(self):
         return len(self.games)

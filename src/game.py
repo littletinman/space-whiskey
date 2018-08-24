@@ -23,11 +23,11 @@ class Game:
         self.command = command
         self.focused = False
 
-    def createFrame(self, master, x):
+    def createFrame(self, master):
         self.frame = tk.Frame(
-                master=master, 
-                width=220, height=220, 
-                pady=10, padx=10, 
+                master=master,
+                width=220, height=220,
+                pady=10, padx=10,
                 bg='black', cursor="hand2",
                 highlightthickness=2, highlightbackground='black')
         if self.image != None:
@@ -36,13 +36,13 @@ class Game:
         else:
             self.promo = tk.Label(self.frame, anchor=N, pady=50, text="NO IMAGE")
         self.label = tk.Label(
-                self.frame, anchor=W, justify=LEFT, 
-                pady=10, bg='black', fg='white', 
-                wraplength=200, borderwidth=0, 
+                self.frame, anchor=W, justify=LEFT,
+                pady=10, bg='black', fg='white',
+                wraplength=200, borderwidth=0,
                 text=self.title + "\n\n" + self.description)
 
         self.master = master
-        
+
         self.promo.pack(fill='x')
         self.label.pack(fill='x')
 
@@ -53,7 +53,7 @@ class Game:
         self.frame.bind('<Leave>', self.leave)
 
         self.frame.pack_propagate(0)
-        master.create_window(x, master.winfo_height()/2 + 20, anchor=CENTER, window=self.frame)
+        master.create_window(master.winfo_width() - 1, master.winfo_height() - 1, anchor=NW, window=self.frame)
 
     def launch(self, event):
         # TODO: Check if game is already running
@@ -61,26 +61,35 @@ class Game:
 
     def enter(self, event):
         if self.focused:
-            self.frame.config(width=240, height=240, pady=20, padx=20, highlightthickness=2, highlightbackground='white')
+            self.frame.config(highlightthickness=2, highlightbackground='white')
         else:
             self.frame.config(highlightthickness=2, highlightbackground='white')
 
     def leave(self, event):
         if self.focused:
-            self.frame.config(width=240, height=240, pady=20, padx=20, highlightthickness=2, highlightbackground='white')
+            self.frame.config(highlightthickness=2, highlightbackground='white')
         else:
             self.frame.config(highlightthickness=2, highlightbackground='black')
 
     def focus(self):
-        self.focused = True
-        self.frame.config(width=240, height=240, pady=20, padx=20, highlightthickness=2, highlightbackground='white')
+        if not self.focused:
+            self.focused = True
+            self.frame.update()
+            self.frame.config(highlightthickness=2, highlightbackground='white')
+            self.frame.place(x=self.master.winfo_width()/2, anchor=CENTER, y=self.master.winfo_height()/2 + 20)
 
     def unfocus(self):
         self.focused = False
-        self.frame.config(width=220, height=220, pady=10, padx=10, highlightthickness=2, highlightbackground='black')
+        self.frame.update()
+        self.frame.config(highlightthickness=2, highlightbackground='black')
+        self.frame.place(anchor=NW, x=self.master.winfo_width() - 1, y=self.master.winfo_height() - 1)
 
-    def moveLeft(self):
-        self.frame.place(x=self.frame.winfo_x() - 250, y=self.frame.winfo_y())
+    def unfocusRight(self):
+        self.frame.update()
+        self.frame.config(highlightthickness=2, highlightbackground='black')
+        self.frame.place(x=self.master.winfo_width()/2 + 250, anchor=CENTER, y=self.master.winfo_height()/2 + 20)
 
-    def moveRight(self):
-        self.frame.place(x=self.frame.winfo_x() + 250, y=self.frame.winfo_y())
+    def unfocusLeft(self):
+        self.frame.update()
+        self.frame.config(highlightthickness=2, highlightbackground='black')
+        self.frame.place(x=self.master.winfo_width()/2 - 250, anchor=CENTER, y=self.master.winfo_height()/2 + 20)

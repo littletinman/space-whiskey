@@ -9,6 +9,7 @@ It provides this functionality without the need to install any external librarie
 ## How it Works
 - Looks in the Games folder of the current user
 - Looks in each folder for a metadata.json file
+- Looks in the Games folder for a library.json file for external games
 - Lists the games in a minimal user interface
 - Provides a simple way to launch any of the games
 
@@ -23,4 +24,24 @@ This file should be included in your game directory:
 }
 ```
 
+## Sample library.json
+This file should go in the /Games directory of your user
+```
+{
+  "games": [
+    {
+      "title": "My Game 1",
+      "description": "A great game",
+      "image": null or absolute path*,
+      "command": "start command for game"
+    },
+    {
+      "title": "My Game 2",
+      "description": "A great game",
+      "image": null or absolute path*,
+      "command": "start command for game"
+    }
+  ]
+}
+```
 * Must be either png or gif

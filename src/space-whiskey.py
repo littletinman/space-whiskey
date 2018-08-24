@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+"""
+    space-whiskey
+    ~~~~~~~~~~~~~~
+    :copyright: © 2018 by the Phillip Royer.
+    :license: BSD, see LICENSE for more details.
+"""
+
 try:
     import tkinter as tk
     from tkinter import *
@@ -36,7 +44,7 @@ brandingImage = origBrandingImage.zoom(1, 1)
 branding = canvas.create_image(canvas.winfo_width()/2, 15, anchor=N, image=brandingImage)
 
 # Version and Repo
-version = canvas.create_text(10, canvas.winfo_height() - 5, anchor=SW, fill="white", text="0.0.2")
+version = canvas.create_text(10, canvas.winfo_height() - 5, anchor=SW, fill="white", text="0.0.3")
 contribute = canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height() - 5, anchor=S, fill="white", text="github.com/littletinman/space-whiskey")
 count = canvas.create_text(canvas.winfo_width() - 5, canvas.winfo_height() - 5, anchor=SE, fill="white", text="0 Games")
 
