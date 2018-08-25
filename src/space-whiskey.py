@@ -16,20 +16,23 @@ import os
 import subprocess
 import json
 import utils
+from config import *
 from library import *
 
-# Setup
+config = Config()
 root = tk.Tk()
 
-# Window Mode
+# Setup Window
 root.title('Space Whiskey')
-root.geometry("800x480")
-root.resizable(0, 0)
-
-# Fullscreen
-#root.overrideredirect(True)
-#root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
-#root.focus_set()
+if config.fullscreen:
+    root.attributes("-fullscreen", True)
+    root.wm_attributes("-topmost", 1)
+    root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
+    root.focus_set()
+else:
+    root.geometry("800x480")
+    root.resizable(0, 0)
+    root.focus_set()
 
 # Main Canvas
 canvas = Canvas(master=root, bg='black', highlightthickness=0)
@@ -60,6 +63,9 @@ def _quit(event):
     root.destroy()
 
 root.bind("<Escape>", _quit)
+
+## Uncomment for autoclose
+# root.after(5000, root.destroy) 
 
 # Run
 root.mainloop()

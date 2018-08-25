@@ -5,6 +5,7 @@
     :copyright: © 2018 by the Phillip Royer.
     :license: BSD, see LICENSE for more details.
 """
+import logging
 import utils
 import json
 from game import *
@@ -21,6 +22,23 @@ class Library:
         self.directories = utils.listDirectories()
 
     def build(self):
+        
+        logging.info("Building library from directories")
+        self.buildLibraryFromDirectories()
+
+        logging.info("Building library from file")
+        self.buildLibraryFromFile()
+
+        if self.getCount() > 0:
+            self.games[self.index].focus()
+            if (self.index + 1) <= (self.getCount() - 1):
+                self.games[self.index + 1].unfocusRight()
+
+            self.setupSlider()
+            self.root.bind("<Right>", self.nextGame)
+            self.root.bind("<Left>", self.previousGame)
+
+    def buildLibraryFromDirectories(self):
         for idx, directory in enumerate(self.directories):
             if utils.verifyMetadata(directory):
                 with open(self.path + '/' + directory + '/metadata.json') as f:
@@ -33,17 +51,6 @@ class Library:
                             data['command'])
                     game.createFrame(self.canvas)
                     self.games.append(game)
-
-        self.buildLibraryFromFile()
-
-        if self.getCount() > 0:
-            self.games[self.index].focus()
-            if (self.index + 1) <= (self.getCount() - 1):
-                self.games[self.index + 1].unfocusRight()
-
-            self.setupSlider()
-            self.root.bind("<Right>", self.nextGame)
-            self.root.bind("<Left>", self.previousGame)
 
     def buildLibraryFromFile(self):
         if utils.verifyLibraryFile():

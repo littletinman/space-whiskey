@@ -13,6 +13,15 @@ It provides this functionality without the need to install any external librarie
 - Lists the games in a minimal user interface
 - Provides a simple way to launch any of the games
 
+## Sample config.json
+This file goes in the src folder of Space Whiskey but is not required:
+```
+{
+    "fullscreen": false,
+    "logfile": log.log
+}
+```
+
 ## Sample metadata.json
 This file should be included in your game directory:
 ```
