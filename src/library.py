@@ -78,11 +78,13 @@ class Library:
         if self.index < len(self.games) - 1:
             self.index += 1
             self.setFocus(self.index + 1)
+            self.slider.set(self.index + 1)
 
     def previousGame(self, event):
         if self.index > 0:
             self.index -= 1
             self.setFocus(self.index + 1)
+            self.slider.set(self.index + 1)
 
     def setFocus(self, index):
         self.index = int(index) - 1
