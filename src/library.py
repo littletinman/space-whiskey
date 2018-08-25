@@ -40,6 +40,8 @@ class Library:
             self.games[self.index].focus()
             if (self.index + 1) <= (self.getCount() - 1):
                 self.games[self.index + 1].unfocusRight()
+
+            self.setupSlider()
             self.root.bind("<Right>", self.nextGame)
             self.root.bind("<Left>", self.previousGame)
 
@@ -57,28 +59,40 @@ class Library:
                     game.createFrame(self.canvas)
                     self.games.append(game)
 
+    def setupSlider(self):
+        self.sliderFrame = tk.Frame(
+                master=self.canvas,
+                highlightthickness=0, highlightbackground='black',
+                bg='black')
+        self.slider = Scale(
+            self.sliderFrame, from_=1,
+            to=self.getCount(), bg="black", fg='white',
+            highlightthickness=0, highlightbackground='black',
+            troughcolor='white',
+            orient=HORIZONTAL, command=self.setFocus)
+        self.slider.pack(fill='x')
+        self.sliderFrame.pack()
+        self.canvas.create_window(self.canvas.winfo_width()/2, self.canvas.winfo_height() - 70, window=self.sliderFrame)
 
     def nextGame(self, event):
         if self.index < len(self.games) - 1:
             self.index += 1
-            for game in self.games:
-                game.unfocus()
-            if self.index > 0:
-                self.games[self.index - 1].unfocusLeft()
-            self.games[self.index].focus()
-            if self.index < self.getCount() - 1:
-                self.games[self.index + 1].unfocusRight()
+            self.setFocus(self.index + 1)
 
     def previousGame(self, event):
         if self.index > 0:
             self.index -= 1
-            for game in self.games:
-                game.unfocus()
-            if self.index > 0:
-                self.games[self.index - 1].unfocusLeft()
-            self.games[self.index].focus()
-            if self.index < self.getCount() - 1:
-                self.games[self.index + 1].unfocusRight()
+            self.setFocus(self.index + 1)
+
+    def setFocus(self, index):
+        self.index = int(index) - 1
+        for game in self.games:
+            game.unfocus()
+        if self.index > 0:
+            self.games[self.index - 1].unfocusLeft()
+        self.games[self.index].focus()
+        if self.index < self.getCount() - 1:
+            self.games[self.index + 1].unfocusRight()
 
     def getCount(self):
         return len(self.games)
