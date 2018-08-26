@@ -5,15 +5,15 @@
     :copyright: © 2018 by the Phillip Royer.
     :license: BSD, see LICENSE for more details.
 """
+import pygame
 import logging
 import utils
 import json
 from game import *
 
 class Library:
-    def __init__(self, root, canvas):
-        self.root = root
-        self.canvas = canvas
+    def __init__(self, screen):
+        self.screen = screen
         self.games = []
         self.index = 0
 
@@ -22,7 +22,7 @@ class Library:
         self.directories = utils.listDirectories()
 
     def build(self):
-        
+
         logging.info("Building library from directories")
         self.buildLibraryFromDirectories()
 
@@ -32,11 +32,10 @@ class Library:
         if self.getCount() > 0:
             self.games[self.index].focus()
             if (self.index + 1) <= (self.getCount() - 1):
+                pass
                 self.games[self.index + 1].unfocusRight()
 
-            self.setupSlider()
-            self.root.bind("<Right>", self.nextGame)
-            self.root.bind("<Left>", self.previousGame)
+            # self.setupSlider()
 
     def buildLibraryFromDirectories(self):
         for idx, directory in enumerate(self.directories):
@@ -49,7 +48,7 @@ class Library:
                             data['description'],
                             self.path + '/' + directory + '/' + data['image'],
                             data['command'])
-                    game.createFrame(self.canvas)
+                    game.create(self.screen)
                     self.games.append(game)
 
     def buildLibraryFromFile(self):
@@ -63,7 +62,7 @@ class Library:
                             item['description'],
                             item['image'],
                             item['command'])
-                    game.createFrame(self.canvas)
+                    game.create(self.screen)
                     self.games.append(game)
 
     def setupSlider(self):
@@ -81,19 +80,20 @@ class Library:
         self.sliderFrame.pack()
         self.canvas.create_window(self.canvas.winfo_width()/2, self.canvas.winfo_height() - 70, window=self.sliderFrame)
 
-    def nextGame(self, event):
+    def nextGame(self):
         if self.index < len(self.games) - 1:
             self.index += 1
             self.setFocus(self.index + 1)
-            self.slider.set(self.index + 1)
+            #self.slider.set(self.index + 1)
 
-    def previousGame(self, event):
+    def previousGame(self):
         if self.index > 0:
             self.index -= 1
             self.setFocus(self.index + 1)
-            self.slider.set(self.index + 1)
+            #self.slider.set(self.index + 1)
 
     def setFocus(self, index):
+        self.screen.fill((0,0,0))
         self.index = int(index) - 1
         for game in self.games:
             game.unfocus()
@@ -102,6 +102,7 @@ class Library:
         self.games[self.index].focus()
         if self.index < self.getCount() - 1:
             self.games[self.index + 1].unfocusRight()
+        pygame.display.flip()
 
     def getCount(self):
         return len(self.games)
