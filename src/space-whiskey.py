@@ -5,6 +5,10 @@
     :copyright: © 2018 by the Phillip Royer.
     :license: BSD, see LICENSE for more details.
 """
+# TODO: Mouseovers on games
+# TODO: Transitions between games
+# TODO: Controller/Gamepad Support
+
 import pygame
 from pygame.locals import *
 from config import *
@@ -45,20 +49,34 @@ def drawUI():
 library = Library(screen)
 library.build()
 
+drawUI()
+pygame.display.flip()
 pygame.event.clear()
 
 running = True
 while running:
 
-    drawUI()
-    pygame.display.flip()
+    for game in library.games:
+        if game.rect.collidepoint(pygame.mouse.get_pos()):
+            game.highlight()
+        else:
+            game.unhighlight()
 
-    event = pygame.event.wait()
-    if event.type == pygame.QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
-        running = False
-    elif event.type == KEYDOWN and event.key == K_RIGHT:
-        library.nextGame()
-    elif event.type == KEYDOWN and event.key == K_LEFT:
-        library.previousGame()
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            running = False
+        elif event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                running = False
+            elif event.key == K_RIGHT:
+                library.nextGame()
+                drawUI()
+                pygame.display.flip()
+            elif event.key == K_LEFT:
+                library.previousGame()
+                drawUI()
+                pygame.display.flip()
+
 
 pygame.quit()

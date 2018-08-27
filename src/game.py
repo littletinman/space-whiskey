@@ -22,6 +22,7 @@ class Game:
         self.y = 0
         self.width = 220
         self.height = 220
+        self.rect = pygame.Rect(self.x - 7, self.y -7, self.width, self.height) 
 
     def create(self, screen):
         self.screen = screen
@@ -57,25 +58,38 @@ class Game:
             self.focused = True
             self.x = self.screen.get_size()[0]/2 - self.width/2
             self.y = self.screen.get_size()[1]/3
+            self.rect = pygame.Rect(self.x - 7, self.y -7, self.width, self.height) 
             pygame.draw.rect(self.screen, (255,255,255), (self.x - 7, self.y -7, self.width, self.height), 2)
             self.screen.blit(self.image, (self.x + self.width/2 - self.image.get_size()[0]/2, self.y))
-            self.screen.blit(self.label, (self.x, self.y + self.image.get_size()[1] + 10))
-            self.screen.blit(self.label_desc, (self.x, self.y + self.image.get_size()[1] + 30))
+            self.screen.blit(self.label, (self.x, self.y + 130))
+            self.screen.blit(self.label_desc, (self.x, self.y + 150))
 
     def unfocus(self):
         self.focused = False
         self.x, self.y = self.screen.get_size()
-        self.screen.blit(self.image, (self.x, self.y))
+        self.screen.blit(self.image, (self.x + self.width/2 - self.image.get_size()[0]/2, self.y))
         self.screen.blit(self.label, (self.x, self.y + self.image.get_size()[1] + 10))
 
     def unfocusRight(self):
-        self.x = self.screen.get_size()[0]/2 - self.image.get_size()[0]/2 + 250
+        self.x = self.screen.get_size()[0]/3 * 2
         self.y = self.screen.get_size()[1]/3
-        self.screen.blit(self.image, (self.x, self.y))
-        self.screen.blit(self.label, (self.x, self.y + self.image.get_size()[1] + 10))
+        self.rect = pygame.Rect(self.x - 7, self.y -7, self.width, self.height) 
+        self.screen.blit(self.image, (self.x + self.width/2 - self.image.get_size()[0]/2, self.y))
+        self.screen.blit(self.label, (self.x, self.y + 130))
 
     def unfocusLeft(self):
-        self.x = self.screen.get_size()[0]/2 - self.image.get_size()[0]/2 - 250
+        self.x = self.screen.get_size()[0]/3 - self.width
         self.y = self.screen.get_size()[1]/3
-        self.screen.blit(self.image, (self.x, self.y))
-        self.screen.blit(self.label, (self.x, self.y + self.image.get_size()[1] + 10))
+        self.rect = pygame.Rect(self.x - 7, self.y -7, self.width, self.height) 
+        self.screen.blit(self.image, (self.x + self.width/2 - self.image.get_size()[0]/2, self.y))
+        self.screen.blit(self.label, (self.x, self.y + 130))
+
+    def highlight(self):
+        pygame.draw.rect(self.screen, (255,255,255), self.rect, 2)
+        pygame.display.flip()
+
+    def unhighlight(self):
+        if not self.focused:
+            pygame.draw.rect(self.screen, (0,0,0), self.rect, 2)
+            pygame.display.flip()
+
