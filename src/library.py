@@ -37,16 +37,17 @@ class Library:
 
             # self.setupSlider()
 
-    def buildLibraryFromDirectories(self):
-        for idx, directory in enumerate(self.directories):
-            if utils.verifyMetadata(directory):
-                with open(self.path + '/' + directory + '/metadata.json') as f:
+    def buildLibraryFromDirectories(self, folder=utils.getGamesDirectory()):
+        directories = utils.listDirectories(folder)
+        for directory in directories:
+            if utils.verifyMetadata(folder + '/' + directory):
+                with open(folder + '/' + directory + '/metadata.json') as f:
                     data = json.load(f)
                     game = Game(
                             directory,
                             data['title'],
                             data['description'],
-                            self.path + '/' + directory + '/' + data['image'],
+                            folder + '/' + directory + '/' + data['image'],
                             data['command'])
                     game.create(self.screen)
                     self.games.append(game)
@@ -55,15 +56,19 @@ class Library:
         if utils.verifyLibraryFile():
             with open(self.path + '/library.json') as f:
                 library_file = json.load(f)
-                for item in library_file['games']:
-                    game = Game(
+                if 'games' in library_file:
+                    for item in library_file['games']:
+                        game = Game(
                             'Games',
                             item['title'],
                             item['description'],
                             item['image'],
                             item['command'])
-                    game.create(self.screen)
-                    self.games.append(game)
+                        game.create(self.screen)
+                        self.games.append(game)
+                if 'directories' in library_file:
+                    for directory in library_file['directories']:
+                        self.buildLibraryFromDirectories(directory)
 
     def setupSlider(self):
         self.sliderFrame = tk.Frame(

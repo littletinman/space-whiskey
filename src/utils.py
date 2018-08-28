@@ -22,7 +22,7 @@ def verifyLibraryFile():
         return False
 
 def verifyMetadata(directory):
-    if metadataExists(games_path + "/" + directory):
+    if metadataExists(directory):
         # TODO validate fields
         return True
     else:
@@ -49,5 +49,5 @@ def validateMetadata():
 
     return
 
-def listDirectories():
-    return [ name for name in os.listdir(games_path) if os.path.isdir(os.path.join(games_path, name)) ]
+def listDirectories(folder=games_path):
+    return [ name for name in os.listdir(folder) if os.path.isdir(os.path.join(folder, name)) ]
