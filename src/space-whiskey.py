@@ -70,22 +70,24 @@ def update():
                 library.nextGame()
             elif event.key == K_LEFT:
                 library.previousGame()
- 
+
     # Process Gamepad
 
     pass
 
 def draw():
 
+    screen.fill((0,0,0))
+
     # Draw UI
     drawUI()
 
     # Draw Games
     for game in library.games:
+        game.update()
         if game.rect.collidepoint(pygame.mouse.get_pos()):
-            game.draw(True)
-        else:
-            game.draw()
+            game.hover()
+        game.draw()
 
     pygame.display.flip()
 
@@ -93,5 +95,5 @@ running = True
 while running:
     update()
     draw()
-    clock.tick(24)
+    clock.tick(30)
 pygame.quit()

@@ -31,9 +31,9 @@ class Library:
 
         if self.getCount() > 0:
             self.games[self.index].focus()
-            if (self.index + 1) <= (self.getCount() - 1):
-                pass
-                self.games[self.index + 1].unfocusRight()
+
+        for idx, game in enumerate(self.games):
+            game.setIndex(idx)
 
     def buildLibraryFromDirectories(self, folder=utils.getGamesDirectory()):
         directories = utils.listDirectories(folder)
@@ -67,27 +67,26 @@ class Library:
                 if 'directories' in library_file:
                     for directory in library_file['directories']:
                         self.buildLibraryFromDirectories(directory)
-    
+
     def nextGame(self):
         if self.index < len(self.games) - 1:
             self.index += 1
             self.setFocus(self.index + 1)
+            for game in self.games:
+                game.moveLeft()
 
     def previousGame(self):
         if self.index > 0:
             self.index -= 1
             self.setFocus(self.index + 1)
+            for game in self.games:
+                game.moveRight()
 
     def setFocus(self, index):
-        self.screen.fill((0,0,0))
         self.index = int(index) - 1
         for game in self.games:
             game.unfocus()
-        if self.index > 0:
-            self.games[self.index - 1].unfocusLeft()
         self.games[self.index].focus()
-        if self.index < self.getCount() - 1:
-            self.games[self.index + 1].unfocusRight()
         pygame.display.flip()
 
     def getCount(self):
