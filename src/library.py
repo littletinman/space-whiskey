@@ -35,8 +35,6 @@ class Library:
                 pass
                 self.games[self.index + 1].unfocusRight()
 
-            # self.setupSlider()
-
     def buildLibraryFromDirectories(self, folder=utils.getGamesDirectory()):
         directories = utils.listDirectories(folder)
         for directory in directories:
@@ -69,33 +67,16 @@ class Library:
                 if 'directories' in library_file:
                     for directory in library_file['directories']:
                         self.buildLibraryFromDirectories(directory)
-
-    def setupSlider(self):
-        self.sliderFrame = tk.Frame(
-                master=self.canvas,
-                highlightthickness=0, highlightbackground='black',
-                bg='black')
-        self.slider = Scale(
-            self.sliderFrame, from_=1,
-            to=self.getCount(), bg="black", fg='white',
-            highlightthickness=0, highlightbackground='black',
-            troughcolor='white',
-            orient=HORIZONTAL, command=self.setFocus)
-        self.slider.pack(fill='x')
-        self.sliderFrame.pack()
-        self.canvas.create_window(self.canvas.winfo_width()/2, self.canvas.winfo_height() - 70, window=self.sliderFrame)
-
+    
     def nextGame(self):
         if self.index < len(self.games) - 1:
             self.index += 1
             self.setFocus(self.index + 1)
-            #self.slider.set(self.index + 1)
 
     def previousGame(self):
         if self.index > 0:
             self.index -= 1
             self.setFocus(self.index + 1)
-            #self.slider.set(self.index + 1)
 
     def setFocus(self, index):
         self.screen.fill((0,0,0))

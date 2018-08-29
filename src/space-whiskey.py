@@ -19,6 +19,10 @@ pygame.init()
 pygame.font.init()
 clock = pygame.time.Clock()
 
+# Setup Controllers
+pygame.joystick.init()
+print(pygame.joystick.get_count())
+
 # Setup Window
 pygame.display.set_caption("Space Whiskey")
 if config.fullscreen:
@@ -49,20 +53,13 @@ def drawUI():
 library = Library(screen)
 library.build()
 
-drawUI()
-pygame.display.flip()
 pygame.event.clear()
 
-running = True
-while running:
+def update():
 
-    for game in library.games:
-        if game.rect.collidepoint(pygame.mouse.get_pos()):
-            game.highlight()
-        else:
-            game.unhighlight()
+    global running
 
-
+    # Process Input
     for event in pygame.event.get():
         if event.type == QUIT:
             running = False
@@ -71,12 +68,30 @@ while running:
                 running = False
             elif event.key == K_RIGHT:
                 library.nextGame()
-                drawUI()
-                pygame.display.flip()
             elif event.key == K_LEFT:
                 library.previousGame()
-                drawUI()
-                pygame.display.flip()
+ 
+    # Process Gamepad
 
+    pass
 
+def draw():
+
+    # Draw UI
+    drawUI()
+
+    # Draw Games
+    for game in library.games:
+        if game.rect.collidepoint(pygame.mouse.get_pos()):
+            game.draw(True)
+        else:
+            game.draw()
+
+    pygame.display.flip()
+
+running = True
+while running:
+    update()
+    draw()
+    clock.tick(24)
 pygame.quit()
