@@ -21,7 +21,14 @@ clock = pygame.time.Clock()
 
 # Setup Controllers
 pygame.joystick.init()
-print(pygame.joystick.get_count())
+joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+for joystick in joysticks:
+    joystick.init()
+
+JOY_A_BUTTON = 1
+JOY_B_BUTTON = 2
+JOY_X_AXIS = 0
+JOY_Y_AXIS = 1
 
 # Setup Window
 pygame.display.set_caption("Space Whiskey")
@@ -70,16 +77,18 @@ def update():
                 library.nextGame()
             elif event.key == K_LEFT:
                 library.previousGame()
-
-    # Process Gamepad
-
-    pass
+        elif event.type == JOYBUTTONDOWN:
+            if event.button == JOY_A_BUTTON:
+                library.launch()
+        elif event.type == JOYAXISMOTION:
+            if event.axis == JOY_X_AXIS:
+                if int(event.value) == -1:
+                    library.previousGame()
+                elif int(event.value) == 1:
+                    library.nextGame()
 
 def draw():
-
     screen.fill((0,0,0))
-
-    # Draw UI
     drawUI()
 
     # Draw Games

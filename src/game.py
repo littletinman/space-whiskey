@@ -47,9 +47,12 @@ class Game:
         self.targetX = self.x
         self.y = self.screen.get_size()[1]/3
 
-    def launch(self, event):
-        # TODO: Check if game is already running
-        subprocess.Popen(self.command + " " + utils.getGamesDirectory() + '/' + self.directory + "/")
+    def launch(self):
+        try:
+            p = subprocess.Popen(self.command, cwd=utils.getGamesDirectory() + '/' + self.directory + '/')
+            p.wait()
+        except:
+            print("Couldn't start game")
 
     def focus(self):
         if not self.focused:

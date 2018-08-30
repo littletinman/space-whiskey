@@ -41,6 +41,7 @@ class Library:
             if utils.verifyMetadata(folder + '/' + directory):
                 with open(folder + '/' + directory + '/metadata.json') as f:
                     data = json.load(f)
+                    print(data)
                     game = Game(
                             directory,
                             data['title'],
@@ -69,25 +70,28 @@ class Library:
                         self.buildLibraryFromDirectories(directory)
 
     def nextGame(self):
-        if self.index < len(self.games) - 1:
+        if self.index < len(self.games):
             self.index += 1
-            self.setFocus(self.index + 1)
+            self.setFocus(self.index)
             for game in self.games:
                 game.moveLeft()
 
     def previousGame(self):
         if self.index > 0:
             self.index -= 1
-            self.setFocus(self.index + 1)
+            self.setFocus(self.index)
             for game in self.games:
                 game.moveRight()
 
     def setFocus(self, index):
-        self.index = int(index) - 1
+        self.index = int(index)
         for game in self.games:
             game.unfocus()
         self.games[self.index].focus()
         pygame.display.flip()
+
+    def launch(self):
+        self.games[self.index].launch()
 
     def getCount(self):
         return len(self.games)
