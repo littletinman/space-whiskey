@@ -5,67 +5,106 @@
     :copyright: © 2018 by the Phillip Royer.
     :license: BSD, see LICENSE for more details.
 """
+# TODO: Mouseovers on games
+# TODO: Transitions between games
+# TODO: Controller/Gamepad Support
 
-try:
-    import tkinter as tk
-    from tkinter import *
-except ImportError:
-    import Tkinter as tk
-    from Tkinter import *
-import os
-import subprocess
-import json
-import utils
+import pygame
+from pygame.locals import *
 from config import *
 from library import *
 
 config = Config()
-root = tk.Tk()
+pygame.init()
+pygame.font.init()
+clock = pygame.time.Clock()
+
+# Setup Controllers
+pygame.joystick.init()
+joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+for joystick in joysticks:
+    joystick.init()
+
+JOY_A_BUTTON = 1
+JOY_B_BUTTON = 2
+JOY_X_AXIS = 0
+JOY_Y_AXIS = 1
 
 # Setup Window
-root.title('Space Whiskey')
+pygame.display.set_caption("Space Whiskey")
 if config.fullscreen:
-    root.attributes("-fullscreen", True)
-    root.wm_attributes("-topmost", 1)
-    root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
-    root.focus_set()
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 else:
-    root.geometry("800x480")
-    root.resizable(0, 0)
-    root.focus_set()
-
-# Main Canvas
-canvas = Canvas(master=root, bg='black', highlightthickness=0)
-canvas.pack_propagate(0)
-canvas.pack(fill=tk.BOTH, expand=1)
-root.update()
+    screen = pygame.display.set_mode((800, 480), 0, 32)
+width, height = pygame.display.get_surface().get_size()
+screen.fill((0,0,0))
 
 # Branding
-origBrandingImage = PhotoImage(file="assets/banner.png")
-# TODO: Calculate Zoom Percentage
-brandingImage = origBrandingImage.zoom(1, 1)
-branding = canvas.create_image(canvas.winfo_width()/2, 15, anchor=N, image=brandingImage)
+# TODO: Scale with display
+def drawUI():
+    banner = pygame.image.load('assets/banner.png')
+    banner.convert()
+    screen.blit(banner, (width/2 - banner.get_size()[0]/2, 10))
 
-# Version and Repo
-version = canvas.create_text(10, canvas.winfo_height() - 5, anchor=SW, fill="white", text="0.0.3")
-contribute = canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height() - 5, anchor=S, fill="white", text="github.com/littletinman/space-whiskey")
-count = canvas.create_text(canvas.winfo_width() - 5, canvas.winfo_height() - 5, anchor=SE, fill="white", text="0 Games")
+    # Version, Repo, and Count
+    font = pygame.font.SysFont('Arial', 12)
+    version = font.render('0.1.0', False, (255, 255, 255))
+    screen.blit(version,(5, height - 16))
+    contribute = font.render('github.com/littletinman/space-whiskey', False, (255, 255, 255))
+    screen.blit(contribute,(width/2 - contribute.get_size()[0]/2, height - 16))
+    game_count = str(library.getCount()) + " Games"
+    count = font.render(game_count, False, (255, 255, 255))
+    screen.blit(count,(width - count.get_size()[0] - 5, height - 16))
 
 # Build Library
-library = Library(root, canvas)
+library = Library(screen)
 library.build()
 
-# Games
-updated_count = str(library.getCount()) + " Games"
-canvas.itemconfigure(count, text=updated_count)
+pygame.event.clear()
 
-def _quit(event):
-    root.destroy()
+def update():
 
-root.bind("<Escape>", _quit)
+    global running
 
-## Uncomment for autoclose
-# root.after(5000, root.destroy) 
+    # Process Input
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            running = False
+        elif event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                running = False
+            elif event.key == K_RIGHT:
+                library.nextGame()
+            elif event.key == K_LEFT:
+                library.previousGame()
+            elif event.key == K_RETURN:
+                library.launch()
+        elif event.type == JOYBUTTONDOWN:
+            if event.button == JOY_A_BUTTON:
+                library.launch()
+        elif event.type == JOYAXISMOTION:
+            if event.axis == JOY_X_AXIS:
+                if int(event.value) == -1:
+                    library.previousGame()
+                elif int(event.value) == 1:
+                    library.nextGame()
 
-# Run
-root.mainloop()
+def draw():
+    screen.fill((0,0,0))
+    drawUI()
+
+    # Draw Games
+    for game in library.games:
+        game.update()
+        if game.rect.collidepoint(pygame.mouse.get_pos()):
+            game.hover()
+        game.draw()
+
+    pygame.display.flip()
+
+running = True
+while running:
+    update()
+    draw()
+    clock.tick(30)
+pygame.quit()
