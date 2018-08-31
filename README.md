@@ -1,4 +1,4 @@
-# Space Whiskey
+# Space Whiskey - Tkinter Only Version
 An Open Game Launcher
 
 ## What is Space Whiskey
