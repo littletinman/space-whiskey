@@ -4,7 +4,6 @@ An Open Game Launcher
 ## What is Space Whiskey
 Space Whiskey is a game launcher for the Raspberry Pi and other systems.
 It is designed to allow you to browse your games easily with only the addition of a simple config file.
-It provides this functionality without the need to install any external libraries.
 
 ## How it Works
 - Looks in the Games folder of the current user
@@ -42,15 +41,15 @@ This file should go in the /Games directory of your user
       "title": "My Game 1",
       "description": "A great game",
       "image": null or absolute path*,
-      "command": "start command for game"
-    },
-    {
-      "title": "My Game 2",
-      "description": "A great game",
-      "image": null or absolute path*,
-      "command": "start command for game"
+      "command": "game executable"
     }
-  ]
+  ],
+  "directories": ["absolute/path/to/game/directory"]
 }
 ```
-* Must be either png or gif
+
+## Install
+1. clone repo
+2. install python and pygame
+3. Setup config files accordingly
+4. run ```python space-whiskey.py```

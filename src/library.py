@@ -41,7 +41,6 @@ class Library:
             if utils.verifyMetadata(folder + '/' + directory):
                 with open(folder + '/' + directory + '/metadata.json') as f:
                     data = json.load(f)
-                    print(data)
                     game = Game(
                             directory,
                             data['title'],
@@ -58,7 +57,7 @@ class Library:
                 if 'games' in library_file:
                     for item in library_file['games']:
                         game = Game(
-                            'Games',
+                            'External',
                             item['title'],
                             item['description'],
                             item['image'],
@@ -70,7 +69,7 @@ class Library:
                         self.buildLibraryFromDirectories(directory)
 
     def nextGame(self):
-        if self.index < len(self.games):
+        if self.index < len(self.games) - 1:
             self.index += 1
             self.setFocus(self.index)
             for game in self.games:

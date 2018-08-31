@@ -77,6 +77,8 @@ def update():
                 library.nextGame()
             elif event.key == K_LEFT:
                 library.previousGame()
+            elif event.key == K_RETURN:
+                library.launch()
         elif event.type == JOYBUTTONDOWN:
             if event.button == JOY_A_BUTTON:
                 library.launch()

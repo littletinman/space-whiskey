@@ -19,13 +19,14 @@ class Game:
         self.command = command
         self.focused = False
         self.over = False
+        self.arrived = True
         self.index = 0
         self.x = 0
         self.targetX = 0
         self.y = 0
-        self.pad = 8
-        self.width = 240
-        self.height = 240
+        self.pad = 6
+        self.width = 210
+        self.height = 210
         self.rect = pygame.Rect(self.x - self.pad, self.y -self.pad, self.width, self.height)
 
     def create(self, screen):
@@ -35,6 +36,7 @@ class Game:
         if self.image != None:
             self.image = pygame.image.load(self.image)
             self.image.convert()
+            self.image = pygame.transform.scale(self.image, (200, 120))
         else:
             self.image = self.font.render('NO IMAGE', False, (255, 255, 255))
 
@@ -49,7 +51,10 @@ class Game:
 
     def launch(self):
         try:
-            p = subprocess.Popen(self.command, cwd=utils.getGamesDirectory() + '/' + self.directory + '/')
+            if self.directory == 'External':
+                p = subprocess.Popen(self.command)
+            else:
+                p = subprocess.Popen(self.command, cwd=utils.getGamesDirectory() + '/' + self.directory + '/')
             p.wait()
         except:
             print("Couldn't start game")
@@ -67,10 +72,13 @@ class Game:
     def update(self):
         self.over = False
         if self.x != self.targetX:
+            self.arrived = False
             if self.x > self.targetX:
                 self.x -= 270/5
             elif self.x < self.targetX:
                 self.x += 270/5
+        else:
+            self.arrived = True
 
     def moveRight(self):
         self.targetX += 270
@@ -80,11 +88,11 @@ class Game:
 
     def draw(self):
         self.rect = pygame.Rect(self.x - self.pad, self.y -self.pad, self.width, self.height)
-        if self.over or self.focused:
+        if self.over or self.focused and self.arrived:
             pygame.draw.rect(self.screen, (255,255,255), self.rect, 2)
         else:
             pygame.draw.rect(self.screen, (0,0,0), self.rect, 2)
-        self.screen.blit(self.image, (self.x + self.width/2 - self.image.get_size()[0]/2, self.y))
+        self.screen.blit(self.image, (self.x, self.y))
         self.screen.blit(self.label, (self.x, self.y + 130))
         if self.focused:
             self.screen.blit(self.label_desc, (self.x, self.y + 150))
