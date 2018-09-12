@@ -54,7 +54,7 @@ class Game:
             if self.directory == 'External':
                 p = subprocess.Popen(self.command)
             else:
-                p = subprocess.Popen(self.command, cwd=self.directory + '/')
+                p = subprocess.Popen(self.command, cwd=utils.getGamesDirectory() + '/' + self.directory + '/')
             p.wait()
         except:
             print("Couldn't start game")

@@ -42,7 +42,7 @@ class Library:
                 with open(folder + '/' + directory + '/metadata.json') as f:
                     data = json.load(f)
                     game = Game(
-                            folder + '/' + directory + '/',
+                            directory,
                             data['title'],
                             data['description'],
                             folder + '/' + directory + '/' + data['image'],
