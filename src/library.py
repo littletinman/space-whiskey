@@ -89,8 +89,8 @@ class Library:
         self.games[self.index].focus()
         pygame.display.flip()
 
-    def launch(self):
-        self.games[self.index].launch()
+    def launch(self, messages):
+        self.games[self.index].launch(messages)
 
     def getCount(self):
         return len(self.games)

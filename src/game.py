@@ -2,13 +2,15 @@
 """
     space-whiskey.game
     ~~~~~~~~~~~~~~
-    :copyright: © 2018 by the Phillip Royer.
+    :copyright: © 2018 by Phil Royer.
     :license: BSD, see LICENSE for more details.
 """
+import traceback
 import pygame
 import subprocess
 import utils
 import textwrap
+from message import *
 
 class Game:
     def __init__(self, directory, title, description, image, command):
@@ -49,7 +51,7 @@ class Game:
         self.targetX = self.x
         self.y = self.screen.get_size()[1]/3
 
-    def launch(self):
+    def launch(self, messages):
         try:
             if self.directory == 'External':
                 p = subprocess.Popen(self.command)
@@ -57,7 +59,7 @@ class Game:
                 p = subprocess.Popen(self.command, cwd=self.directory + '/')
             p.wait()
         except:
-            print("Couldn't start game")
+            messages.append(Message("LAUNCH ERROR", "Unable to launch Game"))
 
     def focus(self):
         if not self.focused:
