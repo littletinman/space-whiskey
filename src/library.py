@@ -12,8 +12,9 @@ import json
 from game import *
 
 class Library:
-    def __init__(self, screen):
+    def __init__(self, screen, messages):
         self.screen = screen
+        self.messages = messages
         self.games = []
         self.index = 0
 
@@ -66,7 +67,10 @@ class Library:
                         self.games.append(game)
                 if 'directories' in library_file:
                     for directory in library_file['directories']:
-                        self.buildLibraryFromDirectories(directory)
+                        try:
+                            self.buildLibraryFromDirectories(directory)
+                        except OSError as error:
+                            self.messages.append(Message("DIRECTORY ERROR", "Unable to load Directory", error))
 
     def nextGame(self):
         if self.index < len(self.games) - 1:
@@ -89,8 +93,8 @@ class Library:
         self.games[self.index].focus()
         pygame.display.flip()
 
-    def launch(self, messages):
-        self.games[self.index].launch(messages)
+    def launch(self):
+        self.games[self.index].launch(self.messages)
 
     def getCount(self):
         return len(self.games)

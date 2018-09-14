@@ -55,12 +55,12 @@ def drawUI():
     count = font.render(game_count, False, (255, 255, 255))
     screen.blit(count,(width - count.get_size()[0] - 5, height - 16))
 
-# Build Library
-library = Library(screen)
-library.build()
-
 # Message List
 messages = []
+
+# Build Library
+library = Library(screen, messages)
+library.build()
 
 pygame.event.clear()
 
@@ -86,10 +86,10 @@ def update():
             elif event.key == K_LEFT:
                 library.previousGame()
             elif event.key == K_RETURN:
-                library.launch(messages)
+                library.launch()
         elif event.type == JOYBUTTONDOWN:
             if event.button == JOY_A_BUTTON:
-                library.launch(messages)
+                library.launch()
         elif event.type == JOYAXISMOTION:
             if event.axis == JOY_X_AXIS:
                 if int(event.value) == -1:
