@@ -5,7 +5,7 @@
     :copyright: © 2018 by the Phillip Royer.
     :license: BSD, see LICENSE for more details.
 """
-import os
+import os, json
 
 user_path = os.path.expanduser("~/")
 games_path = user_path + "Games"
@@ -13,6 +13,10 @@ games_path = user_path + "Games"
 def verifyGamesDirectory():
     if not folderExists():
         createFolder()
+        createJSON()
+    else:
+        if not libraryFileExists():
+            createJSON()
 
 def verifyLibraryFile():
     if libraryFileExists():
@@ -44,6 +48,10 @@ def libraryFileExists():
 
 def createFolder():
     os.makedirs(games_path)
+
+def createJSON():
+    json_file = open(games_path + "/library.json","w+")
+    json.dump({'games': [], 'directories': []}, json_file, indent=4)
 
 def validateMetadata():
 
