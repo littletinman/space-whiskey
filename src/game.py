@@ -2,13 +2,15 @@
 """
     space-whiskey.game
     ~~~~~~~~~~~~~~
-    :copyright: © 2018 by the Phillip Royer.
+    :copyright: © 2018 by Phil Royer.
     :license: BSD, see LICENSE for more details.
 """
+import traceback
 import pygame
 import subprocess
 import utils
 import textwrap
+from message import *
 
 class Game:
     def __init__(self, directory, title, description, image, command):
@@ -29,14 +31,18 @@ class Game:
         self.height = 210
         self.rect = pygame.Rect(self.x - self.pad, self.y -self.pad, self.width, self.height)
 
-    def create(self, screen):
+    def create(self, screen, messages):
         self.screen = screen
         self.font = pygame.font.SysFont('Arial', 12)
 
         if self.image != None:
-            self.image = pygame.image.load(self.image)
-            self.image.convert()
-            self.image = pygame.transform.scale(self.image, (200, 120))
+            try:
+                self.image = pygame.image.load(self.image)
+                self.image.convert()
+                self.image = pygame.transform.scale(self.image, (200, 120))
+            except pygame.error as error:
+                self.image = self.font.render('NO IMAGE', False, (255, 255, 255))
+                messages.append(Message("IMAGE ERROR", "Unable to find image for " + self.title + ".", error))
         else:
             self.image = self.font.render('NO IMAGE', False, (255, 255, 255))
 
@@ -49,15 +55,20 @@ class Game:
         self.targetX = self.x
         self.y = self.screen.get_size()[1]/3
 
-    def launch(self):
+    def launch(self, messages):
+        
+        if self.command == None:
+            messages.append(Message("LAUNCH ERROR", "No Command For '" + self.title + "'", None))
+            return
+
         try:
             if self.directory == 'External':
                 p = subprocess.Popen(self.command)
             else:
                 p = subprocess.Popen(self.command, cwd=self.directory + '/')
             p.wait()
-        except:
-            print("Couldn't start game")
+        except OSError as error:
+            messages.append(Message("LAUNCH ERROR", "Unable to launch game", error))
 
     def focus(self):
         if not self.focused:

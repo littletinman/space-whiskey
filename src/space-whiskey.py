@@ -6,13 +6,12 @@
     :license: BSD, see LICENSE for more details.
 """
 # TODO: Mouseovers on games
-# TODO: Transitions between games
-# TODO: Controller/Gamepad Support
 
 import pygame
 from pygame.locals import *
 from config import *
 from library import *
+from message import *
 
 config = Config()
 pygame.init()
@@ -56,8 +55,11 @@ def drawUI():
     count = font.render(game_count, False, (255, 255, 255))
     screen.blit(count,(width - count.get_size()[0] - 5, height - 16))
 
+# Message List
+messages = []
+
 # Build Library
-library = Library(screen)
+library = Library(screen, messages)
 library.build()
 
 pygame.event.clear()
@@ -65,6 +67,14 @@ pygame.event.clear()
 def update():
 
     global running
+
+    if len(messages) > 0:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                running = False
+            elif event.type == KEYDOWN:
+                messages.pop(0)
+        pass
 
     # Process Input
     for event in pygame.event.get():
@@ -100,6 +110,10 @@ def draw():
             game.hover()
         game.draw()
 
+    # Draw Messages
+    if len(messages) > 0:
+        messages[0].draw(screen, width, height)
+
     pygame.display.flip()
 
 running = True
@@ -107,4 +121,5 @@ while running:
     update()
     draw()
     clock.tick(30)
+
 pygame.quit()
