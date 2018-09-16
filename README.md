@@ -1,6 +1,8 @@
 # Space Whiskey
 An Open Game Launcher
 
+![Image of Space Whiskey](documentation/assets/screenshot_a.png)
+
 ## What is Space Whiskey
 Space Whiskey is a game launcher for the Raspberry Pi and other systems.
 It is designed to allow you to browse your games easily with only the addition of a simple config file.
@@ -8,9 +10,14 @@ It is designed to allow you to browse your games easily with only the addition o
 ## How it Works
 - Looks in the Games folder of the current user
 - Looks in each folder for a metadata.json file
-- Looks in the Games folder for a library.json file for external games
+- Looks in the Games folder for a library.json file for external games and directories
 - Lists the games in a minimal user interface
 - Provides a simple way to launch any of the games
+
+## Goals
+- Use no libraries other than pygame
+- Work on 2.7 and 3.6
+- Be B&W in order to draw attention to the games
 
 ## Sample config.json
 This file goes in the src folder of Space Whiskey but is not required:
@@ -32,6 +39,9 @@ This file should be included in your game directory:
 }
 ```
 
+## Sample Game
+You can see a sample metadata setup or test your installation with the following repo: https://github.com/littletinman/space-whiskey-pong
+
 ## Sample library.json
 This file should go in the /Games directory of your user
 ```
@@ -49,7 +59,7 @@ This file should go in the /Games directory of your user
 ```
 
 ## Install
-1. clone repo
-2. install python and pygame
-3. Setup config files accordingly
-4. run ```python space-whiskey.py```
+1. Download Repo
+2. Install python and pygame
+3. Add games to ```/Games``` or add directories to ```/Games/library.json```
+4. Run ```python space-whiskey.py```
