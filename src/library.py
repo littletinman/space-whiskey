@@ -42,14 +42,7 @@ class Library:
             if utils.verifyMetadata(folder + '/' + directory):
                 with open(folder + '/' + directory + '/metadata.json') as f:
                     data = json.load(f)
-                    game = Game(
-                            folder + '/' + directory + '/',
-                            data['title'],
-                            data['description'],
-                            folder + '/' + directory + '/' + data['image'],
-                            data['command'])
-                    game.create(self.screen)
-                    self.games.append(game)
+                    self.jsonToGame(folder + '/' + directory + '/', data)
 
     def buildLibraryFromFile(self):
         if utils.verifyLibraryFile():
@@ -57,20 +50,34 @@ class Library:
                 library_file = json.load(f)
                 if 'games' in library_file:
                     for item in library_file['games']:
-                        game = Game(
-                            'External',
-                            item['title'],
-                            item['description'],
-                            item['image'],
-                            item['command'])
-                        game.create(self.screen)
-                        self.games.append(game)
+                        self.jsonToGame('External', item)
                 if 'directories' in library_file:
                     for directory in library_file['directories']:
                         try:
                             self.buildLibraryFromDirectories(directory)
                         except OSError as error:
                             self.messages.append(Message("DIRECTORY ERROR", "Unable to load Directory", error))
+
+    def jsonToGame(self, folder,  data):
+        
+        try:
+            if folder != 'External':
+                image = folder + data['image']
+            else:
+                image = data['image']
+
+            game = Game(
+                folder,
+                data['title'],
+                data['description'],
+                image,
+                data['command'])
+            game.create(self.screen, self.messages)
+            self.games.append(game)
+        except OSError as error:
+            self.messages.append(Message("READ ERROR", "Unable to read game from config file.", error))
+        except KeyError as error:
+            self.messages.append(Message("READ ERROR", "Unable to read game from config file.", error))
 
     def nextGame(self):
         if self.index < len(self.games) - 1:

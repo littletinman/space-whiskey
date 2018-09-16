@@ -31,14 +31,18 @@ class Game:
         self.height = 210
         self.rect = pygame.Rect(self.x - self.pad, self.y -self.pad, self.width, self.height)
 
-    def create(self, screen):
+    def create(self, screen, messages):
         self.screen = screen
         self.font = pygame.font.SysFont('Arial', 12)
 
         if self.image != None:
-            self.image = pygame.image.load(self.image)
-            self.image.convert()
-            self.image = pygame.transform.scale(self.image, (200, 120))
+            try:
+                self.image = pygame.image.load(self.image)
+                self.image.convert()
+                self.image = pygame.transform.scale(self.image, (200, 120))
+            except pygame.error as error:
+                self.image = self.font.render('NO IMAGE', False, (255, 255, 255))
+                messages.append(Message("IMAGE ERROR", "Unable to find image for " + self.title + ".", error))
         else:
             self.image = self.font.render('NO IMAGE', False, (255, 255, 255))
 

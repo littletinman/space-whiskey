@@ -70,7 +70,9 @@ def update():
 
     if len(messages) > 0:
         for event in pygame.event.get():
-            if event.type == KEYDOWN:
+            if event.type == QUIT:
+                running = False
+            elif event.type == KEYDOWN:
                 messages.pop(0)
         pass
 
@@ -119,4 +121,5 @@ while running:
     update()
     draw()
     clock.tick(30)
+
 pygame.quit()
