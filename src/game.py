@@ -53,18 +53,18 @@ class Game:
         lines = []
         self.desc_split = description.split(" ")
         self.curr_width = font.size(description)[0]
-        self.line2 = ""
+        self.new_line = ""
         while self.curr_width > self.width - self.pad:
             # cut off words one by one, put them into another line
-            self.line2 = self.desc_split[-1] + " " + self.line2
+            self.new_line = self.desc_split[-1] + " " + self.new_line
             self.desc_split.pop()
             self.curr_width = font.size(" ".join(self.desc_split))[0]
         lines.append(self.font.render(" ".join(self.desc_split), False, (255, 255, 255)))
-        if(font.size(self.line2)[0] > self.width):
+        if(font.size(self.new_line)[0] > self.width):
             #recursively make more lines
-            lines.extend(self.wrapDesc(self.line2, font))
+            lines.extend(self.wrapDesc(self.new_line, font))
         else:
-            lines.append(self.font.render(self.line2, False, (255, 255, 255)))
+            lines.append(self.font.render(self.new_line, False, (255, 255, 255)))
         return lines
         
             
