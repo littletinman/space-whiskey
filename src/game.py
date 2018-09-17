@@ -47,7 +47,27 @@ class Game:
             self.image = self.font.render('NO IMAGE', False, (255, 255, 255))
 
         self.label = self.font.render(self.title, False, (255, 255, 255))
-        self.label_desc = self.font.render(self.description, False, (255, 255, 255))
+        self.desc_lines = self.wrapDesc(self.description, self.font)
+    
+    def wrapDesc(self, description, font):
+        lines = []
+        self.desc_split = description.split(" ")
+        self.curr_width = font.size(description)[0]
+        self.new_line = ""
+        while self.curr_width > self.width - self.pad:
+            # cut off words one by one, put them into another line
+            self.new_line = self.desc_split[-1] + " " + self.new_line
+            self.desc_split.pop()
+            self.curr_width = font.size(" ".join(self.desc_split))[0]
+        lines.append(self.font.render(" ".join(self.desc_split), False, (255, 255, 255)))
+        if(font.size(self.new_line)[0] > self.width):
+            #recursively make more lines
+            lines.extend(self.wrapDesc(self.new_line, font))
+        else:
+            lines.append(self.font.render(self.new_line, False, (255, 255, 255)))
+        return lines
+        
+            
 
     def setIndex(self, index):
         self.index = index
@@ -106,4 +126,11 @@ class Game:
         self.screen.blit(self.image, (self.x, self.y))
         self.screen.blit(self.label, (self.x, self.y + 130))
         if self.focused:
-            self.screen.blit(self.label_desc, (self.x, self.y + 150))
+            for line in range(len(self.desc_lines)):
+                #blit all the lines we made in wrapDesc, checking if the next line would not fit
+                if 12 * (line + 1) < 48: 
+                    self.screen.blit(self.desc_lines[line], (self.x, self.y + 150 + 12 * line))
+                else:
+                    self.screen.blit(pygame.font.SysFont('Arial', 12).render("...", False, (255, 255, 255)), 
+                                     (self.x, self.y + 150 + 12 * line))
+                    break
