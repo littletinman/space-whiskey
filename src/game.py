@@ -50,21 +50,22 @@ class Game:
         self.desc_lines = self.wrapDesc(self.description, self.font)
     
     def wrapDesc(self, description, font):
-        self.lines = []
+        lines = []
         self.desc_split = description.split(" ")
         self.curr_width = font.size(description)[0]
         self.line2 = ""
-        while self.curr_width > 210:
+        while self.curr_width > self.width - self.pad:
             # cut off words one by one, put them into another line
             self.line2 = self.desc_split[-1] + " " + self.line2
             self.desc_split.pop()
             self.curr_width = font.size(" ".join(self.desc_split))[0]
-        self.lines.append(self.font.render(" ".join(self.desc_split), False, (255, 255, 255)))
-        if(font.size(self.line2)[0] > 210):
+        lines.append(self.font.render(" ".join(self.desc_split), False, (255, 255, 255)))
+        if(font.size(self.line2)[0] > self.width):
             #recursively make more lines
-            self.lines.extend(self.wrapDesc(self.line2, font))
-        self.lines.append(self.font.render(self.line2, False, (255, 255, 255)))
-        return self.lines
+            lines.extend(self.wrapDesc(self.line2, font))
+        else:
+            lines.append(self.font.render(self.line2, False, (255, 255, 255)))
+        return lines
         
             
 
@@ -126,5 +127,10 @@ class Game:
         self.screen.blit(self.label, (self.x, self.y + 130))
         if self.focused:
             for line in range(len(self.desc_lines)):
-                #blit all the lines we made in wrapDesc
-                self.screen.blit(self.desc_lines[line], (self.x, self.y + 150 + 12 * line))
+                #blit all the lines we made in wrapDesc, checking if the next line would not fit
+                if 12 * (line + 1) < 48: 
+                    self.screen.blit(self.desc_lines[line], (self.x, self.y + 150 + 12 * line))
+                else:
+                    self.screen.blit(pygame.font.SysFont('Arial', 12).render("...", False, (255, 255, 255)), 
+                                     (self.x, self.y + 150 + 12 * line))
+                    break
