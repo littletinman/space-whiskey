@@ -42,10 +42,14 @@ class Game:
                 self.image.convert()
                 self.image = pygame.transform.scale(self.image, (200, 120))
             except pygame.error as error:
-                self.image = self.font.render('NO IMAGE', False, COLOR_FG)
+                self.image = pygame.image.load('assets/no-image.png') 
+                self.image.convert()
+                self.image = pygame.transform.scale(self.image, (200, 120))
                 messages.append(Message("IMAGE ERROR", "Unable to find image for " + self.title + ".", error))
         else:
-            self.image = self.font.render('NO IMAGE', False, COLOR_FG)
+            self.image = pygame.image.load('assets/no-image.png') 
+            self.image.convert()
+            self.image = pygame.transform.scale(self.image, (200, 120))
 
         self.label = self.font.render(self.title, False, COLOR_FG)
         self.desc_lines = self.wrapDesc(self.description, self.font)
