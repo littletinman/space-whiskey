@@ -122,7 +122,15 @@ class Game:
             self.inverted = True
             self.label = self.font.render(self.title, False, COLOR_BG)
             self.desc_color = COLOR_BG
+            self.desc_lines = self.wrapDesc(self.description, self.font)
 
+    def uninvert(self):
+        if self.inverted:
+            self.inverted = False
+            self.label = self.font.render(self.title, False, COLOR_FG)
+            self.desc_color = COLOR_FG
+            self.desc_lines = self.wrapDesc(self.description, self.font)
+    
     def draw(self):
         self.rect = pygame.Rect(self.x - self.pad, self.y -self.pad, self.width, self.height)
         if self.over or self.focused and self.arrived:
@@ -130,6 +138,7 @@ class Game:
             self.invert()
         else:
             pygame.draw.rect(self.screen, COLOR_BG, self.rect)
+            self.uninvert()
         self.screen.blit(self.image, (self.x, self.y))
         self.screen.blit(self.label, (self.x, self.y + 130))
         if self.focused:
