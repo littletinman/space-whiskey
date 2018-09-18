@@ -24,10 +24,10 @@ class Game:
         self.x = 0
         self.targetX = 0
         self.y = 0
-        self.pad = 6
-        self.width = 210
-        self.height = 210
-        self.rect = pygame.Rect(self.x - self.pad, self.y -self.pad, self.width, self.height)
+        self.pad = 3
+        self.width = 200
+        self.height = 200
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
         self.inverted = False
         self.desc_color = COLOR_FG
@@ -59,7 +59,7 @@ class Game:
         self.desc_split = description.split(" ")
         self.curr_width = font.size(description)[0]
         self.new_line = ""
-        while self.curr_width > self.width - self.pad:
+        while self.curr_width > self.width:
             # cut off words one by one, put them into another line
             self.new_line = self.desc_split[-1] + " " + self.new_line
             self.desc_split.pop()
@@ -75,7 +75,7 @@ class Game:
             
     def setIndex(self, index):
         self.index = index
-        self.x = self.screen.get_size()[0]/2 - self.width/2 + self.pad + (270 * index)
+        self.x = self.screen.get_size()[0]/2 - self.width/2 + (270 * index)
         self.targetX = self.x
         self.y = self.screen.get_size()[1]/3
 
@@ -136,7 +136,7 @@ class Game:
             self.desc_lines = self.wrapDesc(self.description, self.font)
     
     def draw(self):
-        self.rect = pygame.Rect(self.x - self.pad, self.y -self.pad, self.width, self.height)
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         if self.over or self.focused and self.arrived:
             pygame.draw.rect(self.screen, COLOR_FG, self.rect)
             self.invert()
@@ -144,12 +144,12 @@ class Game:
             pygame.draw.rect(self.screen, COLOR_BG, self.rect)
             self.uninvert()
         self.screen.blit(self.image, (self.x, self.y))
-        self.screen.blit(self.label, (self.x, self.y + 130))
+        self.screen.blit(self.label, (self.x + self.pad, self.y + 120 + (2 * self.pad)))
         if self.focused:
             for line in range(len(self.desc_lines)):
                 #blit all the lines we made in wrapDesc, checking if the next line would not fit
                 if 12 * (line + 1) < 48: 
-                    self.screen.blit(self.desc_lines[line], (self.x, self.y + 150 + 12 * line))
+                    self.screen.blit(self.desc_lines[line], (self.x + self.pad, self.y + 150 + 12 * line))
                 else:
                     self.screen.blit(pygame.font.SysFont('Arial', 12).render("...", False, self.desc_color), 
                                      (self.x, self.y + 150 + 12 * line))
