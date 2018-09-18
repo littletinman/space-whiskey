@@ -5,11 +5,9 @@
     :copyright: © 2018 by Phil Royer.
     :license: BSD, see LICENSE for more details.
 """
-import traceback
 import pygame
 import subprocess
-import utils
-import textwrap
+from utils import *
 from message import *
 
 class Game:
@@ -31,6 +29,9 @@ class Game:
         self.height = 210
         self.rect = pygame.Rect(self.x - self.pad, self.y -self.pad, self.width, self.height)
 
+        self.inverted = False
+        self.desc_color = COLOR_FG
+
     def create(self, screen, messages):
         self.screen = screen
         self.font = pygame.font.SysFont('Arial', 12)
@@ -41,12 +42,12 @@ class Game:
                 self.image.convert()
                 self.image = pygame.transform.scale(self.image, (200, 120))
             except pygame.error as error:
-                self.image = self.font.render('NO IMAGE', False, (255, 255, 255))
+                self.image = self.font.render('NO IMAGE', False, COLOR_FG)
                 messages.append(Message("IMAGE ERROR", "Unable to find image for " + self.title + ".", error))
         else:
-            self.image = self.font.render('NO IMAGE', False, (255, 255, 255))
+            self.image = self.font.render('NO IMAGE', False, COLOR_FG)
 
-        self.label = self.font.render(self.title, False, (255, 255, 255))
+        self.label = self.font.render(self.title, False, COLOR_FG)
         self.desc_lines = self.wrapDesc(self.description, self.font)
     
     def wrapDesc(self, description, font):
@@ -59,16 +60,15 @@ class Game:
             self.new_line = self.desc_split[-1] + " " + self.new_line
             self.desc_split.pop()
             self.curr_width = font.size(" ".join(self.desc_split))[0]
-        lines.append(self.font.render(" ".join(self.desc_split), False, (255, 255, 255)))
+        lines.append(self.font.render(" ".join(self.desc_split), False, self.desc_color))
         if(font.size(self.new_line)[0] > self.width):
             #recursively make more lines
             lines.extend(self.wrapDesc(self.new_line, font))
         else:
-            lines.append(self.font.render(self.new_line, False, (255, 255, 255)))
+            lines.append(self.font.render(self.new_line, False, self.desc_color))
         return lines
         
             
-
     def setIndex(self, index):
         self.index = index
         self.x = self.screen.get_size()[0]/2 - self.width/2 + self.pad + (270 * index)
@@ -117,12 +117,19 @@ class Game:
     def moveLeft(self):
         self.targetX -= 270
 
+    def invert(self):
+        if not self.inverted:
+            self.inverted = True
+            self.label = self.font.render(self.title, False, COLOR_BG)
+            self.desc_color = COLOR_BG
+
     def draw(self):
         self.rect = pygame.Rect(self.x - self.pad, self.y -self.pad, self.width, self.height)
         if self.over or self.focused and self.arrived:
-            pygame.draw.rect(self.screen, (255,255,255), self.rect, 2)
+            pygame.draw.rect(self.screen, COLOR_FG, self.rect)
+            self.invert()
         else:
-            pygame.draw.rect(self.screen, (0,0,0), self.rect, 2)
+            pygame.draw.rect(self.screen, COLOR_BG, self.rect)
         self.screen.blit(self.image, (self.x, self.y))
         self.screen.blit(self.label, (self.x, self.y + 130))
         if self.focused:
@@ -131,6 +138,6 @@ class Game:
                 if 12 * (line + 1) < 48: 
                     self.screen.blit(self.desc_lines[line], (self.x, self.y + 150 + 12 * line))
                 else:
-                    self.screen.blit(pygame.font.SysFont('Arial', 12).render("...", False, (255, 255, 255)), 
+                    self.screen.blit(pygame.font.SysFont('Arial', 12).render("...", False, self.desc_color), 
                                      (self.x, self.y + 150 + 12 * line))
                     break

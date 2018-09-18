@@ -9,6 +9,7 @@
 
 import pygame
 from pygame.locals import *
+from utils import *
 from config import *
 from library import *
 from message import *
@@ -36,7 +37,6 @@ if config.fullscreen:
 else:
     screen = pygame.display.set_mode((800, 480), 0, 32)
 width, height = pygame.display.get_surface().get_size()
-screen.fill((0,0,0))
 
 # Branding
 # TODO: Scale with display
@@ -47,12 +47,12 @@ def drawUI():
 
     # Version, Repo, and Count
     font = pygame.font.SysFont('Arial', 12)
-    version = font.render('0.1.0', False, (255, 255, 255))
+    version = font.render('0.1.0', False, COLOR_FG)
     screen.blit(version,(5, height - 16))
-    contribute = font.render('github.com/littletinman/space-whiskey', False, (255, 255, 255))
+    contribute = font.render('github.com/littletinman/space-whiskey', False, COLOR_FG)
     screen.blit(contribute,(width/2 - contribute.get_size()[0]/2, height - 16))
     game_count = str(library.getCount()) + " Games"
-    count = font.render(game_count, False, (255, 255, 255))
+    count = font.render(game_count, False, COLOR_FG)
     screen.blit(count,(width - count.get_size()[0] - 5, height - 16))
 
 # Message List
@@ -100,7 +100,7 @@ def update():
                     library.nextGame()
 
 def draw():
-    screen.fill((0,0,0))
+    screen.fill(COLOR_BG)
     drawUI()
 
     # Draw Games
