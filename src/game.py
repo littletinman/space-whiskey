@@ -34,7 +34,7 @@ class Game:
 
     def create(self, screen, messages):
         self.screen = screen
-        self.font = pygame.font.SysFont('Arial', 12)
+        self.font = pygame.font.Font('assets/space-whiskey.ttf', 9)
 
         if self.image != None:
             try:
@@ -45,7 +45,7 @@ class Game:
                 self.image = pygame.image.load('assets/no-image.png') 
                 self.image.convert()
                 self.image = pygame.transform.scale(self.image, (200, 120))
-                messages.append(Message("IMAGE ERROR", "Unable to find image for " + self.title + ".", error))
+                messages.append(Message('IMAGE ERROR', 'Unable to find image for ' + self.title + '.', error))
         else:
             self.image = pygame.image.load('assets/no-image.png') 
             self.image.convert()
@@ -56,15 +56,15 @@ class Game:
     
     def wrapDesc(self, description, font):
         lines = []
-        self.desc_split = description.split(" ")
+        self.desc_split = description.split(' ')
         self.curr_width = font.size(description)[0]
-        self.new_line = ""
-        while self.curr_width > self.width:
+        self.new_line = ''
+        while self.curr_width > self.width - self.pad:
             # cut off words one by one, put them into another line
-            self.new_line = self.desc_split[-1] + " " + self.new_line
+            self.new_line = self.desc_split[-1] + ' ' + self.new_line
             self.desc_split.pop()
-            self.curr_width = font.size(" ".join(self.desc_split))[0]
-        lines.append(self.font.render(" ".join(self.desc_split), False, self.desc_color))
+            self.curr_width = font.size(' '.join(self.desc_split))[0]
+        lines.append(self.font.render(' '.join(self.desc_split), False, self.desc_color))
         if(font.size(self.new_line)[0] > self.width):
             #recursively make more lines
             lines.extend(self.wrapDesc(self.new_line, font))
@@ -82,7 +82,7 @@ class Game:
     def launch(self, messages):
         
         if self.command == None:
-            messages.append(Message("LAUNCH ERROR", "No Command For '" + self.title + "'", None))
+            messages.append(Message('LAUNCH ERROR', 'No Command For "' + self.title + '"', None))
             return
 
         try:
@@ -92,7 +92,7 @@ class Game:
                 p = subprocess.Popen(self.command, cwd=self.directory + '/')
             p.wait()
         except OSError as error:
-            messages.append(Message("LAUNCH ERROR", "Unable to launch game", error))
+            messages.append(Message('LAUNCH ERROR', 'Unable to launch game', error))
 
     def focus(self):
         if not self.focused:
@@ -149,8 +149,8 @@ class Game:
             for line in range(len(self.desc_lines)):
                 #blit all the lines we made in wrapDesc, checking if the next line would not fit
                 if 12 * (line + 1) < 48: 
-                    self.screen.blit(self.desc_lines[line], (self.x + self.pad, self.y + 150 + 12 * line))
+                    self.screen.blit(self.desc_lines[line], (self.x + self.pad, self.y + 146 + 12 * line))
                 else:
-                    self.screen.blit(pygame.font.SysFont('Arial', 12).render("...", False, self.desc_color), 
-                                     (self.x, self.y + 150 + 12 * line))
+                    self.screen.blit(pygame.font.Font('assets/space-whiskey.ttf', 9).render('...', False, self.desc_color), 
+                                     (self.x + self.pad, self.y + 146 + 12 * line))
                     break

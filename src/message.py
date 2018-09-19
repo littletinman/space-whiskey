@@ -10,13 +10,13 @@ from utils import *
 
 class Message:
     def __init__(self, title, content, error):
-        self.fontSmall = pygame.font.SysFont('Arial', 15)
-        self.fontLarge = pygame.font.SysFont('Arial', 25)
+        self.fontSmall = pygame.font.Font('assets/space-whiskey.ttf', 12)
+        self.fontLarge = pygame.font.Font('assets/space-whiskey.ttf', 27)
         self.title   = self.fontLarge.render(title, False, COLOR_FG)
         self.content = self.fontSmall.render(content, False, COLOR_FG)
-        if error == None: error = ""
+        if error == None: error = ''
         self.error   = self.fontSmall.render(str(error), False, COLOR_FG)
-        self.dismiss = self.fontSmall.render("Press any key to dismiss this message", False, COLOR_FG)
+        self.dismiss = self.fontSmall.render('Press any key to dismiss this message', False, COLOR_FG)
 
     def draw(self, screen, width, height):
         self.rect = pygame.Rect(50, 50, width - 100, height - 100)

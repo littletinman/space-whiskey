@@ -31,7 +31,7 @@ JOY_X_AXIS = 0
 JOY_Y_AXIS = 1
 
 # Setup Window
-pygame.display.set_caption("Space Whiskey")
+pygame.display.set_caption('Space Whiskey')
 if config.fullscreen:
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 else:
@@ -46,12 +46,12 @@ def drawUI():
     screen.blit(banner, (width/2 - banner.get_size()[0]/2, 10))
 
     # Version, Repo, and Count
-    font = pygame.font.SysFont('Arial', 12)
-    version = font.render('0.1.0', False, COLOR_FG)
+    font = pygame.font.Font('assets/space-whiskey.ttf', 9)
+    version = font.render('0.1.5', False, COLOR_FG)
     screen.blit(version,(5, height - 16))
     contribute = font.render('github.com/littletinman/space-whiskey', False, COLOR_FG)
     screen.blit(contribute,(width/2 - contribute.get_size()[0]/2, height - 16))
-    game_count = str(library.getCount()) + " Games"
+    game_count = str(library.getCount()) + ' Games'
     count = font.render(game_count, False, COLOR_FG)
     screen.blit(count,(width - count.get_size()[0] - 5, height - 16))
 
