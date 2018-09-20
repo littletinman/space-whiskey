@@ -24,10 +24,10 @@ class Library:
 
     def build(self):
 
-        logging.info("Building library from directories")
+        logging.info('Building library from directories')
         self.buildLibraryFromDirectories()
 
-        logging.info("Building library from file")
+        logging.info('Building library from file')
         self.buildLibraryFromFile()
 
         if self.getCount() > 0:
@@ -56,7 +56,7 @@ class Library:
                         try:
                             self.buildLibraryFromDirectories(directory)
                         except OSError as error:
-                            self.messages.append(Message("DIRECTORY ERROR", "Unable to load Directory", error))
+                            self.messages.append(Message('DIRECTORY ERROR', 'Unable to load Directory', error))
 
     def jsonToGame(self, folder,  data):
         
@@ -75,9 +75,9 @@ class Library:
             game.create(self.screen, self.messages)
             self.games.append(game)
         except OSError as error:
-            self.messages.append(Message("READ ERROR", "Unable to read game from config file.", error))
+            self.messages.append(Message('READ ERROR', 'Unable to read game from config file.', error))
         except KeyError as error:
-            self.messages.append(Message("READ ERROR", "Unable to read game from config file.", error))
+            self.messages.append(Message('READ ERROR', 'Unable to read game from config file.', error))
 
     def nextGame(self):
         if self.index < len(self.games) - 1:

@@ -2,13 +2,19 @@
 """
     space-whiskey.utils
     ~~~~~~~~~~~~~~
-    :copyright: © 2018 by the Phillip Royer.
+    :copyright: © 2018 by Phil Royer.
     :license: BSD, see LICENSE for more details.
 """
 import os, json
 
-user_path = os.path.expanduser("~/")
-games_path = user_path + "Games"
+COLOR_BG = (0,0,0)
+COLOR_FG = (255,255,255)
+
+user_path = os.path.expanduser('~/')
+games_path = user_path + 'Games'
+
+primary_color = (0, 0, 0)
+secondary_color = (255, 255, 255)
 
 def verifyGamesDirectory():
     if not folderExists():
@@ -41,16 +47,16 @@ def folderExists():
     return os.path.exists(games_path)
 
 def metadataExists(directory):
-    return os.path.isfile(directory + "/metadata.json")
+    return os.path.isfile(directory + '/metadata.json')
 
 def libraryFileExists():
-    return os.path.isfile(games_path + "/library.json")
+    return os.path.isfile(games_path + '/library.json')
 
 def createFolder():
     os.makedirs(games_path)
 
 def createJSON():
-    json_file = open(games_path + "/library.json","w+")
+    json_file = open(games_path + '/library.json','w+')
     json.dump({'games': [], 'directories': []}, json_file, indent=4)
 
 def validateMetadata():

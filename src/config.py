@@ -2,7 +2,7 @@
 """
     space-whiskey.config
     ~~~~~~~~~~~~~~
-    :copyright: © 2018 by the Phillip Royer.
+    :copyright: © 2018 by Phil Royer.
     :license: BSD, see LICENSE for more details.
 """
 import os
@@ -12,9 +12,9 @@ import logging
 
 class Config:
     def __init__(self):
-        self.file = "config.json"
+        self.file = 'config.json'
         self.fullscreen = True
-        self.logfile = "error.log"
+        self.logfile = 'error.log'
 
         if self.hasConfig():
             self.readConfig()
