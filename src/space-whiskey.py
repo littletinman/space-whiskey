@@ -98,6 +98,11 @@ def update():
                     library.previousGame()
                 elif int(event.value) == 1:
                     library.nextGame()
+        elif event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+            for game in library.games:
+                if game.rect.collidepoint(pos):
+                    game.launch(messages)
 
 def draw():
     screen.fill(COLOR_BG)
