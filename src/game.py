@@ -23,6 +23,7 @@ class Game:
         self.index = 0
         self.x = 0
         self.targetX = 0
+        self.ease = 0.45
         self.y = 0
         self.pad = 3
         self.width = 200
@@ -108,10 +109,12 @@ class Game:
         self.over = False
         if self.x != self.targetX:
             self.arrived = False
-            if self.x > self.targetX:
-                self.x -= 270/5
-            elif self.x < self.targetX:
-                self.x += 270/5
+            dx = float(self.targetX - self.x)
+            vx = dx * self.ease
+            self.x += vx
+            self.x = int(round(self.x))
+            if abs(dx) < 3:
+                self.x = self.targetX
         else:
             self.arrived = True
 
