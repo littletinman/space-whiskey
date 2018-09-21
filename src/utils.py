@@ -13,9 +13,6 @@ COLOR_FG = (255,255,255)
 user_path = os.path.expanduser('~/')
 games_path = user_path + 'Games'
 
-primary_color = (0, 0, 0)
-secondary_color = (255, 255, 255)
-
 def verifyGamesDirectory():
     if not folderExists():
         createFolder()

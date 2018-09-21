@@ -2,11 +2,9 @@
 """
     space-whiskey
     ~~~~~~~~~~~~~~
-    :copyright: © 2018 by the Phillip Royer.
+    :copyright: © 2018 by Phil Royer.
     :license: BSD, see LICENSE for more details.
 """
-# TODO: Mouseovers on games
-
 import pygame
 from pygame.locals import *
 from utils import *
@@ -30,16 +28,35 @@ JOY_B_BUTTON = 2
 JOY_X_AXIS = 0
 JOY_Y_AXIS = 1
 
+# Surface
+screen = pygame.Surface((800, 480))
+scaled_surface = None
+
 # Setup Window
 pygame.display.set_caption('Space Whiskey')
 if config.fullscreen:
-    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 else:
-    screen = pygame.display.set_mode((800, 480), 0, 32)
-width, height = pygame.display.get_surface().get_size()
+    display = pygame.display.set_mode((800, 480), 0, 32)
+width = 800
+height = 480
+scr_width, scr_height = pygame.display.get_surface().get_size()
+
+# Aspect Ratio
+ar_x = 5
+ar_y = 3
+scaled_width = 0
+scaled_height = 0
+if scr_width/ar_x < scr_height/ar_y:
+    multiplier = scr_width/ar_x
+    scaled_width = int(multiplier * ar_x)
+    scaled_height = int(multiplier * ar_y)
+else:
+    multiplier = scr_height/ar_y
+    scaled_width = int(multiplier * ar_x)
+    scaled_height = int(multiplier * ar_y)
 
 # Branding
-# TODO: Scale with display
 def drawUI():
     banner = pygame.image.load('assets/banner.png')
     banner.convert()
@@ -119,6 +136,9 @@ def draw():
     if len(messages) > 0:
         messages[0].draw(screen, width, height)
 
+
+    scaled_surface = pygame.transform.scale(screen, (scaled_width, scaled_height))
+    display.blit(scaled_surface, (scr_width/2 - scaled_width/2, scr_height/2 - scaled_height/2))
     pygame.display.flip()
 
 running = True

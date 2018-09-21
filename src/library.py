@@ -2,7 +2,7 @@
 """
     space-whiskey.library
     ~~~~~~~~~~~~~~
-    :copyright: © 2018 by the Phillip Royer.
+    :copyright: © 2018 by Phil Royer.
     :license: BSD, see LICENSE for more details.
 """
 import pygame
