@@ -23,6 +23,7 @@ class Game:
         self.index = 0
         self.x = 0
         self.targetX = 0
+        self.targetY = 0
         self.ease = 0.45
         self.y = 0
         self.pad = 3
@@ -78,7 +79,10 @@ class Game:
         self.index = index
         self.x = self.screen.get_size()[0]/2 - self.width/2 + (270 * index)
         self.targetX = self.x
-        self.y = self.screen.get_size()[1]/3
+        if index == 0:
+            self.y = self.screen.get_size()[1]/3
+        else:
+            self.y = self.screen.get_size()[1]/3 + 50
 
     def launch(self, messages):
         
@@ -98,9 +102,11 @@ class Game:
     def focus(self):
         if not self.focused:
             self.focused = True
+            self.targetY = self.screen.get_size()[1]/3
 
     def unfocus(self):
         self.focused = False
+        self.targetY = self.screen.get_size()[1]/3 + 50
 
     def hover(self):
         self.over = True
@@ -110,11 +116,15 @@ class Game:
         if self.x != self.targetX:
             self.arrived = False
             dx = float(self.targetX - self.x)
+            dy = float(self.targetY - self.y)
             vx = dx * self.ease
+            vy = dy * self.ease
             self.x += vx
+            self.y += vy
             self.x = int(round(self.x))
-            if abs(dx) < 3:
-                self.x = self.targetX
+            self.y = int(round(self.y))
+            if abs(dx) < 10 and abs(dy) < 10:
+                self.arrived = True
         else:
             self.arrived = True
 
