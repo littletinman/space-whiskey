@@ -22,15 +22,14 @@ class Game:
         self.arrived = True
         self.index = 0
         self.x = 0
+        self.y = 0
+        self.pad = 3
         self.targetX = 0
         self.targetY = 0
         self.ease = 0.45
-        self.y = 0
-        self.pad = 3
         self.width = 200
         self.height = 200
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-
         self.inverted = False
         self.desc_color = COLOR_FG
 
