@@ -56,7 +56,6 @@ else:
     scaled_width = int(multiplier * ar_x)
     scaled_height = int(multiplier * ar_y)
 
-
 # Branding
 def drawUI():
     banner = pygame.image.load('assets/banner.png')
