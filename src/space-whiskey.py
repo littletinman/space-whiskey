@@ -37,7 +37,7 @@ pygame.display.set_caption('Space Whiskey')
 if config.fullscreen:
     display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 else:
-    display = pygame.display.set_mode((1600, 680), 0, 32)
+    display = pygame.display.set_mode((800, 480), 0, 32)
 width = 800
 height = 480
 scr_width, scr_height = pygame.display.get_surface().get_size()
