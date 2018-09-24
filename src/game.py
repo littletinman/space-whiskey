@@ -96,7 +96,6 @@ class Game:
                 p = subprocess.Popen(self.command, cwd=self.directory, shell=True)
             p.wait()
         except OSError as error:
-            print(error)
             messages.append(Message('LAUNCH ERROR', 'Unable to launch game', error))
 
     def focus(self):
