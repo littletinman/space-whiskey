@@ -84,16 +84,16 @@ class Game:
             self.y = self.screen.get_size()[1]/3 + 50
 
     def launch(self, messages):
-        
+
         if self.command == None:
             messages.append(Message('LAUNCH ERROR', 'No Command For "' + self.title + '"', None))
             return
 
         try:
             if self.directory == 'External':
-                p = subprocess.Popen(self.command)
+                p = subprocess.Popen(self.command, shell=True)
             else:
-                p = subprocess.Popen(self.command, cwd=self.directory + '/')
+                p = subprocess.Popen(self.command, cwd=self.directory, shell=True)
             p.wait()
         except OSError as error:
             messages.append(Message('LAUNCH ERROR', 'Unable to launch game', error))
