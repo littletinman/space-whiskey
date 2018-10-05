@@ -65,7 +65,7 @@ This file should go in the /Games directory of your user
 4. Run ```python space-whiskey.py```
 
 ## Linux Install
-1. Download Repo - ```git clone https://github.com/littletnman/space-whiskey.git```
+1. Download Repo - ```https://github.com/littletinman/space-whiskey.git```
 2. Install pygame, choose one of following options\
   a. Use pip - ```pip install pygame```\
   b. Debian/Ubuntu - ```sudo apt-get install python3-pygame```\
