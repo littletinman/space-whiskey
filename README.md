@@ -66,10 +66,10 @@ This file should go in the /Games directory of your user
 
 ## Linux Install
 1. Download Repo - ```git clone https://github.com/littletnman/space-whiskey.git```
-2. Install pygame, choose one of following options
-  a. Use pip - ```pip install pygame```
-  b. Debian/Ubuntu - ```sudo apt-get install python3-pygame```
-     Fedora - ```sudo yum install python3-pygame```
+2. Install pygame, choose one of following options\
+  a. Use pip - ```pip install pygame```\
+  b. Debian/Ubuntu - ```sudo apt-get install python3-pygame```\
+  c. Fedora - ```sudo yum install python3-pygame```
 3. Test pygame installation - ```python3 -m pygame.examples.aliens```
 4. Add games to ```/Games``` or add directories to ```/Games/library.json```
 5. Run ```python space-whiskey.py```
